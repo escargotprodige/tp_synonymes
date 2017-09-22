@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import sys, re, argparse
+import re, sys
 import numpy as np
+from score import *
 
 
 def main():
 	# 1. traitement des arguments
-	tf = sys.argv[1] or None
+	taille = int(sys.argv[1]) or None
 	algo = sys.argv[2] or None
 	encodage = sys.argv[3] or None
 	textes = sys.argv[4:] or None
@@ -38,7 +39,21 @@ def main():
 
 	# 3. entrainement donnees
 	matrice = np.zeros((i, i))
+	d = 0
+	m = taille // 2
+	f = taille
 
+	while f <= len(corpus):
+		i = d
+		mot = vocabulaire[corpus[m]]
+		while i < f:
+			if i != m:
+				cooc = vocabulaire[corpus[i]]
+				matrice[mot][cooc] += 1
+			i += 1
+		d += 1
+		m += 1
+		f += 1
 
 	# 4. demander mot utilisateur
 	while True:
