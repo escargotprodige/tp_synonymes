@@ -1,10 +1,13 @@
-def produit_scalaire():
+import numpy as np
+import math
+
+def produit_scalaire(u, v):
+	return np.sum(u*v)
+
+
+def least_squares(u, v):
 	pass
 
 
-def least_squares():
-	pass
-
-
-def city_block():
-	pass
+def city_block(u, v):
+	return np.sum(abs(u - v))

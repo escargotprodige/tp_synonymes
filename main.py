@@ -7,13 +7,13 @@ from score import *
 
 def main():
 	# 1. traitement des arguments
-	taille = int(sys.argv[1]) or None
-	algo = sys.argv[2] or None
-	encodage = sys.argv[3] or None
-	textes = sys.argv[4:] or None
-	# TODO: remplacer par argparse
+	taille = int(sys.argv[1])
+	encodage = sys.argv[2]
+	textes = sys.argv[3:]
 
 	texte = ""
+
+	#np.set_printoptions(threshold=np.nan)
 
 	# 2. parser les textes
 	print("Parsage en cours...")
@@ -63,7 +63,26 @@ def main():
 			break
 
 		# 5. trouver liste des synonymes
-		print(rep)
+		try:
+			idx = vocabulaire[rep.lower()]
+			u = matrice[idx]
+
+			score = np.zeros(len(matrice))
+			for _idx, v in enumerate(matrice):
+				if _idx != idx:
+					score[_idx] = city_block(u, v)
+			t = []
+			for mot, index in vocabulaire.items():
+				if mot not in "a,b,c,d,e,f,g,h,i,g,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,x,ses,sa,son,et,la,dans,il,sur,que,de,a,on,un".split(","):
+					t.append((mot, score[index]))
+
+			t = sorted(t, key=lambda score: score[1])
+
+			for res in t[1:10]:
+				print(res)
+
+		except KeyError:
+			print("mot existe pas dans le dictionnaire")
 
 	return 0
 
