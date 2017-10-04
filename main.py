@@ -13,6 +13,8 @@ def main():
 
 	texte = ""
 
+	algorithmes = [produit_scalaire, least_squares, city_block]
+
 	#np.set_printoptions(threshold=np.nan)
 
 	# 2. parser les textes
@@ -57,28 +59,37 @@ def main():
 
 	# 4. demander mot utilisateur
 	while True:
-		rep = input("Entrez un mot pour avoir une liste de synonymes: ")
+		print("""\nEntrez un mot, le nombre de synonymes que vous voulez et la méthode de calcul,)
+i.e. produit scalaire: 0, least squares: 1, city block: 2
+
+Tapez -1 pour quitter\n\n""")
+
+		rep = input()
 
 		if rep == "-1":
 			break
 
 		# 5. trouver liste des synonymes
 		try:
+			rep, nb, algo = rep.split(" ")
+			nb = int(nb)
+			algo = int(algo)
+
 			idx = vocabulaire[rep.lower()]
 			u = matrice[idx]
 
 			score = np.zeros(len(matrice))
 			for _idx, v in enumerate(matrice):
 				if _idx != idx:
-					score[_idx] = city_block(u, v)
+					score[_idx] = algorithmes[algo](u, v)
 			t = []
 			for mot, index in vocabulaire.items():
-				if mot not in "a,b,c,d,e,f,g,h,i,g,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,x,ses,sa,son,et,la,dans,il,sur,que,de,a,on,un".split(","):
+				if mot not in "".split(","):
 					t.append((mot, score[index]))
 
-			t = sorted(t, key=lambda score: score[1])
+			t = sorted(t, key=lambda score: score[1], reverse=not algo)
 
-			for res in t[1:10]:
+			for res in t[1:nb]:
 				print(res)
 
 		except KeyError:
